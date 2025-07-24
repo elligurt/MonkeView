@@ -1,5 +1,5 @@
 # MonkeView
-A mod that displays the players installed mods.
+A mod that displays the players installed mods under their name on the Scoreboard.
 
 **REQUIREMENTS!!**
 
