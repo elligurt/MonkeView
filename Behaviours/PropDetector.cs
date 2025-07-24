@@ -1,39 +1,56 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using ScoreboardAttributes;
 
-namespace MonkeView.Behaviours 
+namespace MonkeView.Behaviours
 {
     public class MonkeView : MonoBehaviourPunCallbacks
     {
-        public override void OnJoinedRoom() => UpdateAllPlayerAttributes();
-        public override void OnPlayerEnteredRoom(Player newPlayer) => UpdatePlayerModsAttribute(newPlayer);
-        public override void OnPlayerPropertiesUpdate(Player player, Hashtable changedProps) => UpdatePlayerModsAttribute(player);
+        private readonly Dictionary<string, string> ModKeyNames = ModKeys.ModNames;
 
-        private void UpdateAllPlayerAttributes() => PhotonNetwork.PlayerList.ForEach(x => UpdatePlayerModsAttribute(x));
+        public override void OnJoinedRoom()
+        {
+            UpdateAllPlayerAttributes();
+        }
+
+        public override void OnPlayerEnteredRoom(Player newPlayer)
+        {
+            UpdatePlayerModsAttribute(newPlayer);
+        }
+
+        public override void OnPlayerPropertiesUpdate(Player player, Hashtable changedProps)
+        {
+            UpdatePlayerModsAttribute(player);
+        }
+
+        private void UpdateAllPlayerAttributes()
+        {
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                UpdatePlayerModsAttribute(player);
+            }
+        }
 
         private void UpdatePlayerModsAttribute(Player player)
         {
-            var customProps = player.CustomProperties;
-            var detectedMods = new List<string>();
+            List<string> detectedMods = new List<string>();
 
-            var modKeyNamesList = new List<KeyValuePair<string, string>>(ModKeys.ModNames);
-            for (int i = 0; i < modKeyNamesList.Count; i++)
+            foreach (var pair in ModKeyNames)
             {
-                var pair = modKeyNamesList[i];
-                if (customProps.TryGetValue(pair.Key, out var value) && value != null)
+                if (player.CustomProperties.TryGetValue(pair.Key, out object value) && value != null)
+                {
                     detectedMods.Add(pair.Value);
+                }
             }
 
-            Registry.AddAttribute(
-                player,
-                detectedMods.Count > 0
-                    ? string.Join(", ", detectedMods)
-                    : "<color=red>No Detected Mods</color>"
-            );
+            string attributeText = detectedMods.Count > 0
+                ? string.Join(", ", detectedMods)
+                : "<color=red>No Detected Mods</color>";
+
+            Registry.AddAttribute(player, attributeText);
         }
     }
 }
