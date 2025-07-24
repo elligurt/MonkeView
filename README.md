@@ -3,7 +3,7 @@ A mod that displays the players installed mods.
 
 **REQUIREMENTS!!**
 
-Scoreboard Atrributes
+**Scoreboard Atrributes:**
 
 https://github.com/developer9998/ScoreboardAttributes
 
