@@ -5,7 +5,7 @@ using Photon.Realtime;
 using UnityEngine;
 using ScoreboardAttributes;
 
-namespace MonkeView.Behaviours
+namespace MonkeView.Behaviours 
 {
     public class MonkeView : MonoBehaviourPunCallbacks
     {

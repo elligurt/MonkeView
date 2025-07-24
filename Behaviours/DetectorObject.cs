@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MonkeView.Behaviours
 {
-    [BepInDependency("com.dev.gorillatag.scoreboardattributes")]
+    [BepInDependency("com.dev.gorillatag.scoreboardattributes")] 
     [BepInPlugin(Constants.GUID, Constants.Name, Constants.Version)]
     public class DetectorObjectPlugin : BaseUnityPlugin
     {

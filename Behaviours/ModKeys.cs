@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 public static class ModKeys
-{
+{ 
     public static readonly Dictionary<string, string> ModNames = new Dictionary<string, string>
     {
         { "ShirtVersion", "GShirts" },
