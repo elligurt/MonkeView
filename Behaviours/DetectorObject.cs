@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace MonkeView.Behaviours
 {
-    [BepInDependency("com.dev.gorillatag.scoreboardattributes")]
+    [BepInDependency("com.dev.gorillatag.scoreboardattributes")] 
     [BepInPlugin(Constants.GUID, Constants.Name, Constants.Version)]
     public class DetectorObjectPlugin : BaseUnityPlugin
     {
-        void Start()
+        public void Start() => GorillaTagger.OnPlayerSpawned(Init);
+        public void Init()
         {
-            GameObject detector = new GameObject("MonkeViewObject");
-            detector.AddComponent<MonkeView>();
-            DontDestroyOnLoad(detector);
+            MonkeView detector = new GameObject("MonkeViewObject").AddComponent<MonkeView>();
+            DontDestroyOnLoad(detector.gameObject);
             Logger.LogInfo("MonkeView loaded");
         }
     }
