@@ -11,7 +11,7 @@ public static class ModKeys
         { "GPronouns", "GPronouns" },
         { "MonkePhone", "MonkePhone" },
         { "GrateVersion", "Grate" },
-        {"GPhysVersion", "GPhys"}
+        { "GPhysVersion", "GPhys"}
     };
 }
-//more will be added
+// More will be added
