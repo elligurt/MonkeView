@@ -5,11 +5,18 @@ using Photon.Realtime;
 using UnityEngine;
 using ScoreboardAttributes;
 
-namespace MonkeView.Behaviours
+namespace MonkeView
 {
     public class MonkeView : MonoBehaviourPunCallbacks
     {
-        private readonly Dictionary<string, string> ModKeyNames = ModKeys.ModNames;
+        public static MonkeView Instance { get; private set; }
+
+        private readonly Dictionary<string, string> modKeyNames = ModKeys.ModNames;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         public override void OnJoinedRoom()
         {
@@ -28,31 +35,35 @@ namespace MonkeView.Behaviours
 
         private void UpdateAllPlayerAttributes()
         {
-            foreach (Player player in PhotonNetwork.PlayerList)
+            Player[] players = PhotonNetwork.PlayerList;
+            for (int i = 0; i < players.Length; i++)
             {
-                UpdatePlayerModsAttribute(player);
+                UpdatePlayerModsAttribute(players[i]);
             }
         }
 
-        private void UpdatePlayerModsAttribute(Player player)
+        public void UpdatePlayerModsAttribute(Player player)
+        {
+            string attributeText = BuildModsAttributeText(player);
+            Registry.AddAttribute(player, attributeText);
+        }
+
+        private string BuildModsAttributeText(Player player)
         {
             List<string> detectedMods = new List<string>();
 
-            foreach (var pair in ModKeyNames)
+            foreach (KeyValuePair<string, string> pair in modKeyNames)
             {
-                if (player.CustomProperties.TryGetValue(pair.Key, out object value) && value != null)
+                object value;
+                if (player.CustomProperties.TryGetValue(pair.Key, out value) && value != null)
                 {
                     detectedMods.Add(pair.Value);
                 }
             }
 
-            string attributeText = detectedMods.Count > 0
+            return detectedMods.Count > 0
                 ? string.Join(", ", detectedMods)
                 : "<color=red>No Detected Mods</color>";
-
-            Registry.AddAttribute(player, attributeText);
         }
     }
 }
-
-// if there is a way to improve the code, please do so or i will figure out how to improve it later
